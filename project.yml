@@ -1,0 +1,80 @@
+name: Armada
+options:
+  bundleIdPrefix: ai.codiv
+  deploymentTarget:
+    macOS: "15.0"
+  createIntermediateGroups: true
+  generateEmptyDirectories: true
+settings:
+  base:
+    SWIFT_VERSION: "5.10"
+    MARKETING_VERSION: "1.2.0"
+    CURRENT_PROJECT_VERSION: "1"
+    CODE_SIGN_IDENTITY: "-"          # overridden by scripts/setup.sh with a real identity when one exists (stable TCC grants)
+    CODE_SIGN_STYLE: Manual
+    DEVELOPMENT_TEAM: ""
+    CODE_SIGN_INJECT_BASE_ENTITLEMENTS: NO
+    ENABLE_HARDENED_RUNTIME: NO
+    SWIFT_STRICT_CONCURRENCY: minimal
+schemes:
+  Armada:
+    build:
+      targets: { Armada: all, ArmadaTests: [test] }
+    run: { config: Release }
+    test:
+      config: Debug
+      targets: [ArmadaTests]
+targets:
+  ArmadaTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources: [Tests/Unit]
+    dependencies: [{ target: Armada }]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: ai.codiv.ArmadaTests
+        CODE_SIGN_IDENTITY: "-"
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Armada.app/Contents/MacOS/Armada"
+        BUNDLE_LOADER: "$(TEST_HOST)"
+        GENERATE_INFOPLIST_FILE: YES
+  Armada:
+    type: application
+    platform: macOS
+    sources:
+      - path: Sources
+      - path: Resources
+        excludes:
+          - "AppIcon.iconset/**"
+    settings:
+      base:
+        PRODUCT_NAME: "Armada"
+        PRODUCT_BUNDLE_IDENTIFIER: ai.codiv.Armada
+        INFOPLIST_FILE: Resources/Info.plist
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        SWIFT_OBJC_BRIDGING_HEADER: ""
+        OTHER_LDFLAGS: ["-framework", "Carbon"]
+    info:
+      path: Resources/Info.plist
+      properties:
+        CFBundleName: "Armada"
+        CFBundleDisplayName: "Armada"
+        CFBundleIdentifier: ai.codiv.Armada
+        CFBundleShortVersionString: "$(MARKETING_VERSION)"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
+        CFBundlePackageType: APPL
+        LSMinimumSystemVersion: "15.0"
+        LSUIElement: true
+        LSApplicationCategoryType: public.app-category.utilities
+        NSHumanReadableCopyright: "Armada — semantic file search powered by Codiv / OpenJev"
+        NSAppTransportSecurity:
+          NSAllowsArbitraryLoads: false
+        NSDesktopFolderUsageDescription: "Armada searches your Desktop by description."
+        NSDocumentsFolderUsageDescription: "Armada searches your Documents by description."
+        NSDownloadsFolderUsageDescription: "Armada searches your Downloads by description."
+        NSRemovableVolumesUsageDescription: "Armada can search external drives you add to its scope."
+        NSNetworkVolumesUsageDescription: "Armada can search network volumes you add to its scope."
+        NSFileProviderDomainUsageDescription: "Armada searches iCloud Drive by description."
+        NSAppleEventsUsageDescription: "Armada opens Finder windows when it falls back to Finder."
+        CFBundleURLTypes:
+          - CFBundleURLName: ai.codiv.Armada
+            CFBundleURLSchemes: [armada]

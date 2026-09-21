@@ -1,0 +1,10 @@
+build/
+dist/
+.DS_Store
+*.xcuserstate
+xcuserdata/
+*.xcodeproj/
+# The author's grounded eval sets name private files; only eval_example.json ships.
+Tests/eval_set.json
+Tests/eval_dates.json
+Tests/eval_launcher.json

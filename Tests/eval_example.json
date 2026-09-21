@@ -1,0 +1,8 @@
+[
+ {"style": "content", "query": "the lease for my apartment", "targets": ["Documents/Personal/Lease/lease.pdf"]},
+ {"style": "date", "query": "my most recent resume", "targets_glob": "Documents/Resume*2026*.pdf"},
+ {"style": "name", "query": "budget.xlsx", "targets": ["Documents/budget.xlsx"], "same_name_ok": true},
+ {"style": "folder", "query": "the folder with my tax documents", "targets": ["Documents/Taxes"]},
+ {"style": "app", "query": "safari", "targets": ["/Applications/Safari.app"]},
+ {"style": "calc", "query": "15% of 80", "calc": "12"}
+]

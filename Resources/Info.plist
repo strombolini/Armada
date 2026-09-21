@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>Armada</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>ai.codiv.Armada</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>Armada</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>$(MARKETING_VERSION)</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>ai.codiv.Armada</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>armada</string>
+			</array>
+		</dict>
+	</array>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.utilities</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>15.0</string>
+	<key>LSUIElement</key>
+	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<false/>
+	</dict>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>Armada opens Finder windows when it falls back to Finder.</string>
+	<key>NSDesktopFolderUsageDescription</key>
+	<string>Armada searches your Desktop by description.</string>
+	<key>NSDocumentsFolderUsageDescription</key>
+	<string>Armada searches your Documents by description.</string>
+	<key>NSDownloadsFolderUsageDescription</key>
+	<string>Armada searches your Downloads by description.</string>
+	<key>NSFileProviderDomainUsageDescription</key>
+	<string>Armada searches iCloud Drive by description.</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>Armada — semantic file search powered by Codiv / OpenJev</string>
+	<key>NSNetworkVolumesUsageDescription</key>
+	<string>Armada can search network volumes you add to its scope.</string>
+	<key>NSRemovableVolumesUsageDescription</key>
+	<string>Armada can search external drives you add to its scope.</string>
+</dict>
+</plist>
