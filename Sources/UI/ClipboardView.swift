@@ -19,6 +19,8 @@ final class ClipboardWindowController: ObservableObject {
     private let history = ClipboardHistory.shared
     private var panel: ClipboardPanel?
     private var keyMonitor: Any?
+    /// The app that was in front when the panel opened; ⏎ hands focus back to it before sending ⌘V.
+    private var previousApp: NSRunningApplication?
 
     static let size = NSSize(width: 780, height: 480)
 
@@ -37,6 +39,7 @@ final class ClipboardWindowController: ObservableObject {
     func show() {
         let p = panel ?? makePanel()
         panel = p
+        if let front = NSWorkspace.shared.frontmostApplication, front != .current { previousApp = front }
         query = ""
         selectFirst()
         let mouse = NSEvent.mouseLocation
@@ -57,8 +60,9 @@ final class ClipboardWindowController: ObservableObject {
         guard let item else { return }
         history.copy(item)
         hide()
+        restoreFocus()
         if Settings.shared.clipboardPasteDirectly {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.08) { ClipboardHistory.pasteIntoFrontApp() }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { ClipboardHistory.pasteIntoFrontApp() }
         }
     }
 
@@ -66,6 +70,13 @@ final class ClipboardWindowController: ObservableObject {
         guard let item else { return }
         history.copy(item)
         hide()
+        restoreFocus()
+    }
+
+    /// Armada is a menu-bar agent: if showing the panel made it the active app, give focus back so ⌘V lands in the right place.
+    private func restoreFocus() {
+        if NSApp.isActive, !Settings.shared.showInDock { NSApp.hide(nil) }
+        previousApp?.activate()
     }
 
     private func selectFirst() { selectedID = filtered.first?.id }
@@ -126,7 +137,7 @@ final class ClipboardWindowController: ObservableObject {
         case 125: move(1); return true                                // ↓
         case 126: move(-1); return true                               // ↑
         case 36, 76: cmd ? copyOnly(selected) : paste(selected); return true   // ⏎ / ⌘⏎
-        case 53: if query.isEmpty { hide() } else { query = "" }; return true  // ⎋
+        case 53: if query.isEmpty { hide(); restoreFocus() } else { query = "" }; return true  // ⎋
         case 51 where cmd:                                            // ⌘⌫
             if let s = selected {
                 let list = filtered, i = list.firstIndex { $0.id == s.id } ?? 0
@@ -335,3 +346,4 @@ private struct ClipPreview: View {
         .font(.system(size: 12))
     }
 }
+
