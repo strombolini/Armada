@@ -8,7 +8,7 @@ final class ClipboardPanel: NSPanel {
     override var canBecomeMain: Bool { false }
 }
 
-/// Opens with the clipboard hotkey (⌘⇧V by default): search field, history on the left, preview on the right.
+/// Opens with the clipboard hotkey (⌃⌥V by default): search field, history on the left, preview on the right.
 @MainActor
 final class ClipboardWindowController: ObservableObject {
     static let shared = ClipboardWindowController()

@@ -20,10 +20,12 @@ final class Settings: ObservableObject {
 
     /// Opens clipboard history (V with modifiers), or nothing.
     enum ClipboardHotkey: String, CaseIterable, Identifiable {
-        case cmdShiftV, optCmdV, ctrlCmdV, off
+        case ctrlOptV, hyperV, cmdShiftV, optCmdV, ctrlCmdV, off
         var id: String { rawValue }
         var label: String {
             switch self {
+            case .ctrlOptV: return "⌃⌥ V"
+            case .hyperV: return "Hyper V (Caps Lock as Hyper in Raycast)"
             case .cmdShiftV: return "⌘⇧ V"
             case .optCmdV: return "⌥⌘ V"
             case .ctrlCmdV: return "⌃⌘ V"
@@ -129,7 +131,7 @@ final class Settings: ObservableObject {
         websiteRows = d.object(forKey: "websiteRows") as? Bool ?? true
         finderIntegration = d.object(forKey: "finderIntegration") as? Bool ?? true
         clipboardEnabled = d.object(forKey: "clipboardEnabled") as? Bool ?? true
-        clipboardHotkey = ClipboardHotkey(rawValue: d.string(forKey: "clipboardHotkey") ?? "") ?? .cmdShiftV
+        clipboardHotkey = ClipboardHotkey(rawValue: d.string(forKey: "clipboardHotkey") ?? "") ?? .ctrlOptV
         clipboardPasteDirectly = d.object(forKey: "clipboardPasteDirectly") as? Bool ?? true
         clipboardLimit = d.object(forKey: "clipboardLimit") as? Int ?? 300
         baseURL = d.string(forKey: "baseURL") ?? "https://api.codiv.ai"

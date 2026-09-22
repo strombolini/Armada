@@ -53,6 +53,8 @@ final class HotKeyCenter {
 
     static func modifiers(for hk: Settings.ClipboardHotkey) -> UInt32? {
         switch hk {
+        case .ctrlOptV: return UInt32(controlKey | optionKey)
+        case .hyperV: return UInt32(controlKey | optionKey | shiftKey | cmdKey)
         case .cmdShiftV: return UInt32(cmdKey | shiftKey)
         case .optCmdV: return UInt32(optionKey | cmdKey)
         case .ctrlCmdV: return UInt32(controlKey | cmdKey)
