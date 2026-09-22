@@ -34,6 +34,10 @@ Describe the file you want; Jev finds it. A Spotlight-style ⌘ Space search for
   (open, results springing open, ⎋ collapsing, close fade + zoom) were measured frame by frame from a 120 fps
   recording of macOS 26's Spotlight and reproduced (see AGENTS.md § Spotlight choreography). The one deliberate
   difference is the search icon filling left→right while Jev works.
+* **Clipboard history, like Raycast** — ⌃⌥ V opens everything you've copied (text, links, images, files copied in
+  Finder), searchable. ⏎ pastes into the app you were in, ⌘⏎ copies, ⌘P pins, ⌘⌫ deletes, ⌘1–⌘9 paste the nth item.
+  Stored locally (~/Library/Application Support/Armada/clipboard), password-manager copies are skipped, never sent to
+  Codiv. Shortcut, size and on/off in Settings › Clipboard history. Pasting needs Accessibility.
 * **Offline** — if Codiv can't be reached, ⌘ Space still opens with name matches (or, optionally, the real Finder).
 
 ## How the search works (Blink-style, on Codiv)

@@ -9,6 +9,7 @@ struct ArmadaApp: App {
         MenuBarExtra {
             Button("Open Armada") { delegate.showPanel() }
                 .keyboardShortcut("j", modifiers: [.command, .option])
+            Button("Clipboard History") { ClipboardWindowController.shared.show() }
             Text(reach.isOnline ? "Codiv: reachable" : "Codiv: unreachable — falling back to Finder")
             if delegate.spotlightConflict {
                 Button("Spotlight also opens on ⌘ Space — turn its shortcut off") { SpotlightShortcut.setEnabled(false) }

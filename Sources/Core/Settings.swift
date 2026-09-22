@@ -18,6 +18,22 @@ final class Settings: ObservableObject {
         }
     }
 
+    /// Opens clipboard history (V with modifiers), or nothing.
+    enum ClipboardHotkey: String, CaseIterable, Identifiable {
+        case ctrlOptV, hyperV, cmdShiftV, optCmdV, ctrlCmdV, off
+        var id: String { rawValue }
+        var label: String {
+            switch self {
+            case .ctrlOptV: return "⌃⌥ V"
+            case .hyperV: return "Hyper V (Caps Lock as Hyper in Raycast)"
+            case .cmdShiftV: return "⌘⇧ V"
+            case .optCmdV: return "⌥⌘ V"
+            case .ctrlCmdV: return "⌃⌘ V"
+            case .off: return "No shortcut"
+            }
+        }
+    }
+
     enum Thoroughness: String, CaseIterable, Identifiable {
         case fast, balanced, thorough
         var id: String { rawValue }
@@ -57,6 +73,10 @@ final class Settings: ObservableObject {
     @Published var webSearchRow: Bool { didSet { d.set(webSearchRow, forKey: "webSearchRow") } }
     @Published var websiteRows: Bool { didSet { d.set(websiteRows, forKey: "websiteRows") } }
     @Published var finderIntegration: Bool { didSet { d.set(finderIntegration, forKey: "finderIntegration") } }
+    @Published var clipboardEnabled: Bool { didSet { d.set(clipboardEnabled, forKey: "clipboardEnabled") } }
+    @Published var clipboardHotkey: ClipboardHotkey { didSet { d.set(clipboardHotkey.rawValue, forKey: "clipboardHotkey") } }
+    @Published var clipboardPasteDirectly: Bool { didSet { d.set(clipboardPasteDirectly, forKey: "clipboardPasteDirectly") } }
+    @Published var clipboardLimit: Int { didSet { d.set(clipboardLimit, forKey: "clipboardLimit") } }
 
     /// Roots actually searched: the configured ones plus external volumes when enabled.
     var effectiveRoots: [String] { searchRoots + (searchExternalVolumes ? Settings.externalVolumeRoots : []) }
@@ -110,6 +130,10 @@ final class Settings: ObservableObject {
         webSearchRow = d.object(forKey: "webSearchRow") as? Bool ?? true
         websiteRows = d.object(forKey: "websiteRows") as? Bool ?? true
         finderIntegration = d.object(forKey: "finderIntegration") as? Bool ?? true
+        clipboardEnabled = d.object(forKey: "clipboardEnabled") as? Bool ?? true
+        clipboardHotkey = ClipboardHotkey(rawValue: d.string(forKey: "clipboardHotkey") ?? "") ?? .ctrlOptV
+        clipboardPasteDirectly = d.object(forKey: "clipboardPasteDirectly") as? Bool ?? true
+        clipboardLimit = d.object(forKey: "clipboardLimit") as? Int ?? 300
         baseURL = d.string(forKey: "baseURL") ?? "https://api.codiv.ai"
         model = d.string(forKey: "model") ?? "openjev-latest"
         apiKey = Keychain.get() ?? ProcessInfo.processInfo.environment["CODIV_API_KEY"] ?? ProcessInfo.processInfo.environment["TYPESAFE_API_KEY"] ?? ""

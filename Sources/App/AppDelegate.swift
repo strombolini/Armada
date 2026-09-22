@@ -27,6 +27,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         controller.onOpen = { [weak self] in self?.hidePanel() }
         Settings.shared.$hotkey.dropFirst().sink { [weak self] _ in self?.registerHotkeys() }.store(in: &cancellables)
         Settings.shared.$alsoOptionSpace.dropFirst().sink { [weak self] _ in self?.registerHotkeys() }.store(in: &cancellables)
+        Settings.shared.$clipboardHotkey.dropFirst().sink { [weak self] _ in DispatchQueue.main.async { self?.registerHotkeys() } }.store(in: &cancellables)
+        ClipboardHistory.shared.start()
         Settings.shared.$showInDock.dropFirst().sink { show in NSApp.setActivationPolicy(show ? .regular : .accessory) }.store(in: &cancellables)
         // Re-size the panel synchronously with every state change (see SearchController.onStateChange).
         controller.onStateChange = { [weak self] in self?.layoutPanel() }
@@ -72,6 +74,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         for url in urls {
             switch url.host {
             case "hide": hidePanel()
+            case "clipboard": ClipboardWindowController.shared.toggle()
             case "settings": openSettings()
             case "setup":
                 if url.query == "close" { onboardingWindow?.orderOut(nil); if !Settings.shared.showInDock { NSApp.setActivationPolicy(.accessory) } }
@@ -107,6 +110,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         HotKeyCenter.shared.register(keyCode: space, modifiers: HotKeyCenter.modifiers(for: s.hotkey)) { [weak self] in self?.hotkeyPressed() }
         if s.alsoOptionSpace, s.hotkey != .optSpace {
             HotKeyCenter.shared.register(keyCode: space, modifiers: HotKeyCenter.modifiers(for: .optSpace)) { [weak self] in self?.hotkeyPressed() }
+        }
+        if let mods = HotKeyCenter.modifiers(for: s.clipboardHotkey) {
+            let v: UInt32 = 9
+            if HotKeyCenter.shared.register(keyCode: v, modifiers: mods, handler: { ClipboardWindowController.shared.toggle() }) == nil {
+                Log.app.error("clipboard hotkey \(s.clipboardHotkey.rawValue, privacy: .public) is taken by another app")
+            }
         }
     }
 
