@@ -54,6 +54,23 @@ struct SettingsView: View {
                 }
                 .onReceive(tick) { _ in spotlightOn = HotKeyCenter.spotlightOwnsCommandSpace() }
             }
+            Section("Clipboard history") {
+                Toggle("Keep a history of what you copy", isOn: $settings.clipboardEnabled)
+                Picker("Open it with", selection: $settings.clipboardHotkey) {
+                    ForEach(Settings.ClipboardHotkey.allCases) { Text($0.label).tag($0) }
+                }
+                Toggle("⏎ pastes into the app you were in (otherwise it just copies)", isOn: $settings.clipboardPasteDirectly)
+                if settings.clipboardPasteDirectly && !ax {
+                    Text("Pasting needs Accessibility (see below). Until then ⏎ copies and you press ⌘V.").font(.caption).foregroundStyle(.secondary)
+                }
+                Picker("Keep", selection: $settings.clipboardLimit) {
+                    ForEach([100, 300, 1000], id: \.self) { Text("Last \($0) items").tag($0) }
+                }
+                HStack {
+                    Button("Clear history") { ClipboardHistory.shared.clearUnpinned() }
+                    Text("Pinned items stay. Password manager copies are never saved, and nothing here is sent to Codiv.").font(.caption).foregroundStyle(.secondary)
+                }
+            }
             Section("Files") {
                 HStack(alignment: .top, spacing: 8) {
                     Image(systemName: fda ? "checkmark.circle.fill" : "exclamationmark.triangle.fill").foregroundStyle(fda ? .green : .yellow)

@@ -8,3 +8,4 @@ xcuserdata/
 Tests/eval_set.json
 Tests/eval_dates.json
 Tests/eval_launcher.json
+build/
